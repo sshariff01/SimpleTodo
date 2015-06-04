@@ -1,17 +1,28 @@
 package com.six.the.in.codepath.simpletodo;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
 
-public class EditItemActivity extends ActionBarActivity {
+public class EditItemActivity extends Activity {
+    EditText etName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_item);
+
+        etName = (EditText) findViewById(R.id.editText);
+        String itemToEdit = getIntent().getStringExtra("item_to_edit");
+        if (itemToEdit != null && !itemToEdit.isEmpty()) {
+            etName.setText(itemToEdit);
+        }
+        etName.setSelection(etName.getText().length());
     }
 
     @Override
@@ -34,5 +45,16 @@ public class EditItemActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onSaveItem(View v) {
+        // Prepare data intent
+        Intent data = new Intent();
+        // Pass relevant data back as a result
+        data.putExtra("name", etName.getText().toString());
+        data.putExtra("position", getIntent().getIntExtra("position", -1));
+        // Activity finished ok, return the data
+        setResult(RESULT_OK, data);
+        finish();
     }
 }

@@ -1,6 +1,7 @@
 package com.six.the.in.codepath.simpletodo;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +22,7 @@ public class MainActivity extends Activity {
     ArrayList<String> items;
     ArrayAdapter<String> itemsAdapter;
     ListView lvItems;
+    static final int EDIT_ITEM = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,38 @@ public class MainActivity extends Activity {
                     }
                 }
         );
+
+        lvItems.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapter,
+                                            View item, int pos, long id) {
+                        Intent intent = new Intent(MainActivity.this, EditItemActivity.class);
+                        intent.putExtra("item_to_edit", items.get(pos));
+                        intent.putExtra("position", pos);
+                        startActivityForResult(intent, EDIT_ITEM);
+                    }
+                }
+        );
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case EDIT_ITEM:
+                if (resultCode == RESULT_OK) {
+                    int pos = data.getIntExtra("position", -1);
+                    if (pos >= 0) {
+                        items.set(pos, data.getExtras().getString("name"));
+                    }
+                }
+                itemsAdapter.notifyDataSetChanged();
+                writeItems();
+                break;
+            default:
+                break;
+        }
+
     }
 
     @Override
