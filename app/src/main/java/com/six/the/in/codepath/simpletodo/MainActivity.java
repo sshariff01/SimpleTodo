@@ -38,8 +38,10 @@ public class MainActivity extends Activity {
                 items
         );
         lvItems.setAdapter(itemsAdapter);
-        items.add("First item");
-        items.add("Second item");
+        if (items.isEmpty()) {
+            items.add("First item");
+            items.add("Second item");
+        }
         setupListViewListener();
     }
 
