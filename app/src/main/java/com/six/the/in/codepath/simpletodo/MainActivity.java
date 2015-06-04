@@ -29,6 +29,7 @@ public class MainActivity extends Activity {
 
         lvItems = (ListView) findViewById(R.id.lvItems);
         items = new ArrayList<String>();
+        readItems();
         itemsAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_1,
@@ -48,6 +49,7 @@ public class MainActivity extends Activity {
                                                    View item, int pos, long id) {
                         items.remove(pos);
                         itemsAdapter.notifyDataSetChanged();
+                        writeItems();
                         return true;
                     }
                 }
@@ -81,6 +83,7 @@ public class MainActivity extends Activity {
         String itemText = etNewItem.getText().toString();
         itemsAdapter.add(itemText);
         etNewItem.setText("");
+        writeItems();
     }
 
     private void readItems() {
