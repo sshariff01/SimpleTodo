@@ -1,6 +1,7 @@
 package com.six.the.in.codepath.simpletodo;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +28,26 @@ public class TodoListAdapter extends ArrayAdapter<TodoItem> {
         }
         // Lookup view for data population
         TextView txtListItem = (TextView) convertView.findViewById(R.id.txtListItem);
+        TextView txtItemPriority = (TextView) convertView.findViewById(R.id.txtItemPrio);
+
         // Populate the data into the template view using the data object
         txtListItem.setText(item.getBody());
+        txtItemPriority.setText(item.getPriorityString());
+        switch (item.getPriorityString()) {
+            case TodoItem.PRIO_LOW:
+                txtItemPriority.setTextColor(Color.BLUE);
+                break;
+            case TodoItem.PRIO_NORMAL:
+                txtItemPriority.setTextColor(Color.GREEN);
+                break;
+            case TodoItem.PRIO_HIGH:
+                txtItemPriority.setTextColor(Color.MAGENTA);
+                break;
+            case TodoItem.PRIO_URGENT:
+                txtItemPriority.setTextColor(Color.RED);
+                break;
+        }
+
         // Return the completed view to render on screen
         return convertView;
     }

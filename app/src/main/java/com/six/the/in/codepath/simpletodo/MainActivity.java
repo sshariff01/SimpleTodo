@@ -29,7 +29,7 @@ public class MainActivity extends FragmentActivity implements EditItemDialog.Edi
         db = new TodoItemDatabase(this);
 
         lvItems = (ListView) findViewById(R.id.lvItems);
-        items = new ArrayList<TodoItem>();
+//        items = new ArrayList<TodoItem>();
         refreshItems();
         itemsAdapter = new TodoListAdapter (
                 this,
