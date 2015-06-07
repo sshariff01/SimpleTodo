@@ -8,23 +8,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 
 public class MainActivity extends FragmentActivity implements EditItemDialog.EditItemDialogListener {
-//public class MainActivity extends FragmentActivity {
-    ArrayList<String> items;
-    ArrayAdapter<String> itemsAdapter;
+    ArrayList<TodoItem> items;
+    TodoListAdapter itemsAdapter;
     ListView lvItems;
-    static final int EDIT_ITEM = 1;
+
+    private static final int DEFAULT_PRIORITY = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,17 +27,16 @@ public class MainActivity extends FragmentActivity implements EditItemDialog.Edi
         setContentView(R.layout.activity_main);
 
         lvItems = (ListView) findViewById(R.id.lvItems);
-        items = new ArrayList<String>();
-        readItems();
-        itemsAdapter = new ArrayAdapter<String>(
+        items = new ArrayList<TodoItem>();
+//        readItems();
+        itemsAdapter = new TodoListAdapter (
                 this,
-                android.R.layout.simple_list_item_1,
                 items
         );
         lvItems.setAdapter(itemsAdapter);
         if (items.isEmpty()) {
-            items.add("First item");
-            items.add("Second item");
+            items.add(new TodoItem("First item", DEFAULT_PRIORITY));
+            items.add(new TodoItem("Second item", DEFAULT_PRIORITY));
         }
         setupListViewListener();
         // Ensure soft keyboard is hidden
@@ -57,7 +51,7 @@ public class MainActivity extends FragmentActivity implements EditItemDialog.Edi
                                                    View item, int pos, long id) {
                         items.remove(pos);
                         itemsAdapter.notifyDataSetChanged();
-                        writeItems();
+//                        writeItems();
                         return true;
                     }
                 }
@@ -82,10 +76,10 @@ public class MainActivity extends FragmentActivity implements EditItemDialog.Edi
     }
 
     @Override
-    public void onFinishEditDialog(String inputText, int itemPosition) {
-        items.set(itemPosition, inputText);
+    public void onFinishEditDialog(String inputText, int itemPriority, int itemPosition) {
+        items.set(itemPosition, new TodoItem(inputText, itemPriority));
         itemsAdapter.notifyDataSetChanged();
-        writeItems();
+//        writeItems();
     }
 
     @Override
@@ -113,27 +107,28 @@ public class MainActivity extends FragmentActivity implements EditItemDialog.Edi
     public void onAddItem(View v) {
         EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
         String itemText = etNewItem.getText().toString();
-        itemsAdapter.add(itemText);
+        itemsAdapter.add(new TodoItem(itemText, DEFAULT_PRIORITY));
         etNewItem.setText("");
-        writeItems();
+//        writeItems();
     }
 
-    private void readItems() {
-        File filesDir = getFilesDir();
-        File todoFile = new File(filesDir, "todo.txt");
-        try {
-            items = new ArrayList<String>(FileUtils.readLines(todoFile));
-        } catch (IOException ioe) {
-            items = new ArrayList<String>();
-        }
-    }
-
-    private void writeItems() {
-        File filesDir = getFilesDir();
-        File todoFile = new File(filesDir, "todo.txt");
-        try {
-            FileUtils.writeLines(todoFile, items);
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-    }}
+//    private void readItems() {
+//        File filesDir = getFilesDir();
+//        File todoFile = new File(filesDir, "todo.txt");
+//        try {
+//            items = new <String>(FileUtils.readLines(todoFile));
+//        } catch (IOException ioe) {
+//            items = new ArrayList<String>();
+//        }
+//    }
+//
+//    private void writeItems() {
+//        File filesDir = getFilesDir();
+//        File todoFile = new File(filesDir, "todo.txt");
+//        try {
+//            FileUtils.writeLines(todoFile, items);
+//        } catch (IOException ioe) {
+//            ioe.printStackTrace();
+//        }
+//    }
+}

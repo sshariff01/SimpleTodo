@@ -18,24 +18,24 @@ import android.widget.TextView;
  * Created by shoabe on 15-06-04.
  */
 public class EditItemDialog extends DialogFragment implements TextView.OnEditorActionListener {
-//public class EditItemDialog extends DialogFragment {
 
     private EditText mEditText;
     private Button saveBtn;
 
     public interface EditItemDialogListener {
-        void onFinishEditDialog(String inputText, int itemPosition);
+        void onFinishEditDialog(String inputText, int itemPriority, int itemPosition);
     }
 
     public EditItemDialog() {
         // Empty constructor required for DialogFragment
     }
 
-    public static EditItemDialog newInstance(String title, String itemName, int itemPosition) {
+    public static EditItemDialog newInstance(String title, TodoItem item, int itemPosition) {
         EditItemDialog frag = new EditItemDialog();
         Bundle args = new Bundle();
         args.putString("title", title);
-        args.putString("itemName", itemName);
+        args.putString("itemName", item.getBody());
+        args.putInt("itemPriority", item.getPriority());
         args.putInt("itemPosition", itemPosition);
         frag.setArguments(args);
         return frag;
@@ -81,7 +81,11 @@ public class EditItemDialog extends DialogFragment implements TextView.OnEditorA
 
     private void closeDialog() {
         EditItemDialogListener listener = (EditItemDialogListener) getActivity();
-        listener.onFinishEditDialog(mEditText.getText().toString(), getArguments().getInt("itemPosition"));
+        listener.onFinishEditDialog(
+                mEditText.getText().toString(),
+                getArguments().getInt("itemPriority"),
+                getArguments().getInt("itemPosition")
+        );
         // Hide soft keyboard
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
