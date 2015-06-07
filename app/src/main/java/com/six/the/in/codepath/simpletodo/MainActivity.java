@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends FragmentActivity implements EditItemDialog.EditItemDialogListener {
     ArrayList<TodoItem> items;
-    TodoListAdapter itemsAdapter;
+    TodoArrayAdapter itemsAdapter;
     ListView lvItems;
     TodoItemDatabase db;
 
@@ -31,7 +31,7 @@ public class MainActivity extends FragmentActivity implements EditItemDialog.Edi
         lvItems = (ListView) findViewById(R.id.lvItems);
 //        items = new ArrayList<TodoItem>();
         refreshItems();
-        itemsAdapter = new TodoListAdapter (
+        itemsAdapter = new TodoArrayAdapter(
                 this,
                 items
         );
@@ -125,7 +125,7 @@ public class MainActivity extends FragmentActivity implements EditItemDialog.Edi
         // Querying all to-do items
         items = db.getAllTodoItems();
         // Resetting the adapter
-        itemsAdapter = new TodoListAdapter (
+        itemsAdapter = new TodoArrayAdapter(
                 this,
                 items
         );

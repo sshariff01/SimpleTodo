@@ -13,8 +13,8 @@ import java.util.ArrayList;
 /**
  * Created by shoabe on 15-06-07.
  */
-public class TodoListAdapter extends ArrayAdapter<TodoItem> {
-    public TodoListAdapter(Context context, ArrayList<TodoItem> items) {
+public class TodoArrayAdapter extends ArrayAdapter<TodoItem> {
+    public TodoArrayAdapter(Context context, ArrayList<TodoItem> items) {
         super(context, 0, items);
     }
 
