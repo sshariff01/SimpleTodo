@@ -8,10 +8,18 @@ public class TodoItem {
     private String body;
     private int priority;
 
+    private static final int DEFAULT_PRIORITY = 1;
+
     public TodoItem(String body, int priority) {
         super();
         this.body = body;
         this.priority = priority;
+    }
+
+    public TodoItem(String body) {
+        super();
+        this.body = body;
+        this.priority = DEFAULT_PRIORITY;
     }
 
     public String getBody() {

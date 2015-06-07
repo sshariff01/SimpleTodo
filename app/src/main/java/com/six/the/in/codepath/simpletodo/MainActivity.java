@@ -19,8 +19,6 @@ public class MainActivity extends FragmentActivity implements EditItemDialog.Edi
     TodoListAdapter itemsAdapter;
     ListView lvItems;
 
-    private static final int DEFAULT_PRIORITY = 1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +33,8 @@ public class MainActivity extends FragmentActivity implements EditItemDialog.Edi
         );
         lvItems.setAdapter(itemsAdapter);
         if (items.isEmpty()) {
-            items.add(new TodoItem("First item", DEFAULT_PRIORITY));
-            items.add(new TodoItem("Second item", DEFAULT_PRIORITY));
+            items.add(new TodoItem("First item"));
+            items.add(new TodoItem("Second item"));
         }
         setupListViewListener();
         // Ensure soft keyboard is hidden
@@ -107,7 +105,7 @@ public class MainActivity extends FragmentActivity implements EditItemDialog.Edi
     public void onAddItem(View v) {
         EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
         String itemText = etNewItem.getText().toString();
-        itemsAdapter.add(new TodoItem(itemText, DEFAULT_PRIORITY));
+        itemsAdapter.add(new TodoItem(itemText));
         etNewItem.setText("");
 //        writeItems();
     }
