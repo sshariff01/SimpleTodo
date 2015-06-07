@@ -27,9 +27,9 @@ The following **optional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/qc2A9e9.gif' title='Simple ToDo Demo' width='' alt='Video Walkthrough' />
+<img src='http://i.imgur.com/TpyFgZW.gif' title='Simple ToDo Demo' width='' alt='Video Walkthrough' />
 
-GIF created with [LiceCap](http://i.imgur.com/TpyFgZW.gif).
+GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
