@@ -18,23 +18,28 @@ public class MainActivity extends FragmentActivity implements EditItemDialog.Edi
     ArrayList<TodoItem> items;
     TodoListAdapter itemsAdapter;
     ListView lvItems;
+    TodoItemDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Create our sqlite database object
+        db = new TodoItemDatabase(this);
+
         lvItems = (ListView) findViewById(R.id.lvItems);
         items = new ArrayList<TodoItem>();
-//        readItems();
+        refreshItems();
         itemsAdapter = new TodoListAdapter (
                 this,
                 items
         );
         lvItems.setAdapter(itemsAdapter);
         if (items.isEmpty()) {
-            items.add(new TodoItem("First item"));
-            items.add(new TodoItem("Second item"));
+            db.addTodoItem(new TodoItem("First item"));
+            db.addTodoItem(new TodoItem("Second item"));
+            refreshItems();
         }
         setupListViewListener();
         // Ensure soft keyboard is hidden
@@ -47,9 +52,8 @@ public class MainActivity extends FragmentActivity implements EditItemDialog.Edi
                     @Override
                     public boolean onItemLongClick(AdapterView<?> adapter,
                                                    View item, int pos, long id) {
-                        items.remove(pos);
-                        itemsAdapter.notifyDataSetChanged();
-//                        writeItems();
+                        db.deleteTodoItem(items.get(pos));
+                        refreshItems();
                         return true;
                     }
                 }
@@ -69,15 +73,21 @@ public class MainActivity extends FragmentActivity implements EditItemDialog.Edi
 
     private void showEditDialog(int itemPosition) {
         FragmentManager fm = getSupportFragmentManager();
-        EditItemDialog editNameDialog = EditItemDialog.newInstance("Edit Item", items.get(itemPosition), itemPosition);
+        EditItemDialog editNameDialog = EditItemDialog.newInstance(
+                "Edit Item",
+                items.get(itemPosition),
+                itemPosition
+        );
         editNameDialog.show(fm, "fragment_edit_name");
     }
 
     @Override
-    public void onFinishEditDialog(String inputText, int itemPriority, int itemPosition) {
-        items.set(itemPosition, new TodoItem(inputText, itemPriority));
-        itemsAdapter.notifyDataSetChanged();
-//        writeItems();
+    public void onFinishEditDialog(int itemId, String inputText, int itemPriority, int itemPos) {
+        TodoItem itemToUpdate = db.getTodoItem(itemId);
+        itemToUpdate.setBody(inputText);
+        itemToUpdate.setPriority(itemPriority);
+        db.updateTodoItem(itemToUpdate);
+        refreshItems();
     }
 
     @Override
@@ -105,28 +115,20 @@ public class MainActivity extends FragmentActivity implements EditItemDialog.Edi
     public void onAddItem(View v) {
         EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
         String itemText = etNewItem.getText().toString();
-        itemsAdapter.add(new TodoItem(itemText));
+        TodoItem itemToAdd = new TodoItem(itemText);
+        db.addTodoItem(itemToAdd);
+        refreshItems();
         etNewItem.setText("");
-//        writeItems();
     }
 
-//    private void readItems() {
-//        File filesDir = getFilesDir();
-//        File todoFile = new File(filesDir, "todo.txt");
-//        try {
-//            items = new <String>(FileUtils.readLines(todoFile));
-//        } catch (IOException ioe) {
-//            items = new ArrayList<String>();
-//        }
-//    }
-//
-//    private void writeItems() {
-//        File filesDir = getFilesDir();
-//        File todoFile = new File(filesDir, "todo.txt");
-//        try {
-//            FileUtils.writeLines(todoFile, items);
-//        } catch (IOException ioe) {
-//            ioe.printStackTrace();
-//        }
-//    }
+    private void refreshItems() {
+        // Querying all to-do items
+        items = db.getAllTodoItems();
+        // Resetting the adapter
+        itemsAdapter = new TodoListAdapter (
+                this,
+                items
+        );
+        lvItems.setAdapter(itemsAdapter);
+    }
 }

@@ -23,20 +23,21 @@ public class EditItemDialog extends DialogFragment implements TextView.OnEditorA
     private Button saveBtn;
 
     public interface EditItemDialogListener {
-        void onFinishEditDialog(String inputText, int itemPriority, int itemPosition);
+        void onFinishEditDialog(int itemId, String inputText, int itemPriority, int itemPos);
     }
 
     public EditItemDialog() {
         // Empty constructor required for DialogFragment
     }
 
-    public static EditItemDialog newInstance(String title, TodoItem item, int itemPosition) {
+    public static EditItemDialog newInstance(String title, TodoItem item, int itemPos) {
         EditItemDialog frag = new EditItemDialog();
         Bundle args = new Bundle();
         args.putString("title", title);
+        args.putInt("itemId", item.getId());
         args.putString("itemName", item.getBody());
         args.putInt("itemPriority", item.getPriority());
-        args.putInt("itemPosition", itemPosition);
+        args.putInt("itemPos", itemPos);
         frag.setArguments(args);
         return frag;
     }
@@ -81,10 +82,12 @@ public class EditItemDialog extends DialogFragment implements TextView.OnEditorA
 
     private void closeDialog() {
         EditItemDialogListener listener = (EditItemDialogListener) getActivity();
+        Bundle args = getArguments();
         listener.onFinishEditDialog(
+                getArguments().getInt("itemId"),
                 mEditText.getText().toString(),
                 getArguments().getInt("itemPriority"),
-                getArguments().getInt("itemPosition")
+                getArguments().getInt("itemPos")
         );
         // Hide soft keyboard
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
