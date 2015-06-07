@@ -33,17 +33,17 @@ public class TodoArrayAdapter extends ArrayAdapter<TodoItem> {
         // Populate the data into the template view using the data object
         txtListItem.setText(item.getBody());
         txtItemPriority.setText(item.getPriorityString());
-        switch (item.getPriorityString()) {
-            case TodoItem.PRIO_LOW:
+        switch (item.getPriority()) {
+            case TodoItem.PRIO_LOW_INT:
                 txtItemPriority.setTextColor(Color.BLUE);
                 break;
-            case TodoItem.PRIO_NORMAL:
+            case TodoItem.PRIO_NORMAL_INT:
                 txtItemPriority.setTextColor(Color.GREEN);
                 break;
-            case TodoItem.PRIO_HIGH:
+            case TodoItem.PRIO_HIGH_INT:
                 txtItemPriority.setTextColor(Color.MAGENTA);
                 break;
-            case TodoItem.PRIO_URGENT:
+            case TodoItem.PRIO_URGENT_INT:
                 txtItemPriority.setTextColor(Color.RED);
                 break;
         }

@@ -4,5 +4,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="save">Save</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_edit_item">EditItemActivity</string>
+
+    <string name="priority_low">Low</string>
+    <string name="priority_med">Medium</string>
+    <string name="priority_high">High</string>
+    <string name="priority_urgent">Urgent</string>
+
 </resources>

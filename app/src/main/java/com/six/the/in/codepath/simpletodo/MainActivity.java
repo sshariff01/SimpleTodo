@@ -75,14 +75,13 @@ public class MainActivity extends FragmentActivity implements EditItemDialog.Edi
         FragmentManager fm = getSupportFragmentManager();
         EditItemDialog editNameDialog = EditItemDialog.newInstance(
                 "Edit Item",
-                items.get(itemPosition),
-                itemPosition
+                items.get(itemPosition)
         );
         editNameDialog.show(fm, "fragment_edit_name");
     }
 
     @Override
-    public void onFinishEditDialog(int itemId, String inputText, int itemPriority, int itemPos) {
+    public void onFinishEditDialog(int itemId, String inputText, int itemPriority) {
         TodoItem itemToUpdate = db.getTodoItem(itemId);
         itemToUpdate.setBody(inputText);
         itemToUpdate.setPriority(itemPriority);

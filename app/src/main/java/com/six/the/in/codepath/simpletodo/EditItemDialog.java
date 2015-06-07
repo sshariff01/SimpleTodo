@@ -12,32 +12,35 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 /**
  * Created by shoabe on 15-06-04.
  */
-public class EditItemDialog extends DialogFragment implements TextView.OnEditorActionListener {
+public class EditItemDialog extends DialogFragment implements TextView.OnEditorActionListener, View.OnClickListener {
 
     private EditText mEditText;
     private Button saveBtn;
+    private RadioButton prio_LowBtn, prio_MedBtn, prio_HighBtn, prio_UrgentBtn;
+    private int itemPriority;
 
     public interface EditItemDialogListener {
-        void onFinishEditDialog(int itemId, String inputText, int itemPriority, int itemPos);
+        void onFinishEditDialog(int itemId, String inputText, int itemPriority);
     }
 
     public EditItemDialog() {
         // Empty constructor required for DialogFragment
     }
 
-    public static EditItemDialog newInstance(String title, TodoItem item, int itemPos) {
+    public static EditItemDialog newInstance(String title, TodoItem item) {
         EditItemDialog frag = new EditItemDialog();
         Bundle args = new Bundle();
         args.putString("title", title);
+//        todoItem = item;
         args.putInt("itemId", item.getId());
         args.putString("itemName", item.getBody());
         args.putInt("itemPriority", item.getPriority());
-        args.putInt("itemPos", itemPos);
         frag.setArguments(args);
         return frag;
     }
@@ -64,7 +67,58 @@ public class EditItemDialog extends DialogFragment implements TextView.OnEditorA
 
 
         mEditText.setOnEditorActionListener(this);
+        itemPriority = getArguments().getInt("itemPriority");
+        prio_LowBtn = (RadioButton) view.findViewById(R.id.priority_low);
+        prio_LowBtn.setOnClickListener(this);
+        prio_MedBtn = (RadioButton) view.findViewById(R.id.priority_med);
+        prio_MedBtn.setOnClickListener(this);
+        prio_HighBtn = (RadioButton) view.findViewById(R.id.priority_high);
+        prio_HighBtn.setOnClickListener(this);
+        prio_UrgentBtn = (RadioButton) view.findViewById(R.id.priority_urgent);
+        prio_UrgentBtn.setOnClickListener(this);
+
+        setPriorityChecked();
+
         return view;
+    }
+
+    private void setPriorityChecked() {
+        switch(itemPriority) {
+            case TodoItem.PRIO_LOW_INT:
+                prio_LowBtn.setChecked(true);
+                break;
+            case TodoItem.PRIO_NORMAL_INT:
+                prio_MedBtn.setChecked(true);
+                break;
+            case TodoItem.PRIO_HIGH_INT:
+                prio_HighBtn.setChecked(true);
+                break;
+            case TodoItem.PRIO_URGENT_INT:
+                prio_UrgentBtn.setChecked(true);
+                break;
+        }
+    }
+
+    @Override
+    public void onClick(View v){
+        switch (v.getId()) {
+            case R.id.priority_low:
+                itemPriority = TodoItem.PRIO_LOW_INT;
+                prio_LowBtn.setChecked(true);
+                break;
+            case R.id.priority_med:
+                itemPriority = TodoItem.PRIO_NORMAL_INT;
+                prio_MedBtn.setChecked(true);
+                break;
+            case R.id.priority_high:
+                itemPriority = TodoItem.PRIO_HIGH_INT;
+                prio_HighBtn.setChecked(true);
+                break;
+            case R.id.priority_urgent:
+                itemPriority = TodoItem.PRIO_URGENT_INT;
+                prio_UrgentBtn.setChecked(true);
+                break;
+        }
     }
 
     // Fires whenever the textfield has an action performed
@@ -82,12 +136,10 @@ public class EditItemDialog extends DialogFragment implements TextView.OnEditorA
 
     private void closeDialog() {
         EditItemDialogListener listener = (EditItemDialogListener) getActivity();
-        Bundle args = getArguments();
         listener.onFinishEditDialog(
                 getArguments().getInt("itemId"),
                 mEditText.getText().toString(),
-                getArguments().getInt("itemPriority"),
-                getArguments().getInt("itemPos")
+                itemPriority
         );
         // Hide soft keyboard
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);

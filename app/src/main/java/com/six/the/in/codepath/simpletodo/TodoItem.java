@@ -11,19 +11,22 @@ public class TodoItem {
     private String body;
     private int priority;
 
-    public static final String PRIO_LOW = "LOW";
-    public static final String PRIO_NORMAL = "NORMAL";
-    public static final String PRIO_HIGH = "HIGH";
-    public static final String PRIO_URGENT = "URGENT";
+    public static final int PRIO_LOW_INT = 1;
+    public static final int PRIO_NORMAL_INT = 2;
+    public static final int PRIO_HIGH_INT = 3;
+    public static final int PRIO_URGENT_INT = 4;
+
+    public static final String PRIO_LOW_STRING = "LOW";
+    public static final String PRIO_NORMAL_STRING = "NORMAL";
+    public static final String PRIO_HIGH_STRING = "HIGH";
+    public static final String PRIO_URGENT_STRING = "URGENT";
 
     private static final Map<Integer, String> priorityMap = new HashMap<Integer, String>() {{
-        put(1, PRIO_LOW);
-        put(2, PRIO_NORMAL);
-        put(3, PRIO_HIGH);
-        put(4, PRIO_URGENT);
+        put(PRIO_LOW_INT, PRIO_LOW_STRING);
+        put(PRIO_NORMAL_INT, PRIO_NORMAL_STRING);
+        put(PRIO_HIGH_INT, PRIO_HIGH_STRING);
+        put(PRIO_URGENT_INT, PRIO_URGENT_STRING);
     }};
-
-    private static final int DEFAULT_PRIORITY = 1;
 
     public TodoItem(String body, int priority) {
         super();
@@ -34,7 +37,7 @@ public class TodoItem {
     public TodoItem(String body) {
         super();
         this.body = body;
-        this.priority = DEFAULT_PRIORITY;
+        this.priority = PRIO_LOW_INT;
     }
 
     public String getBody() {
