@@ -1,11 +1,12 @@
 package com.six.the.in.codepath.simpletodo;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -18,7 +19,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity implements EditItemDialog.EditItemDialogListener {
+//public class MainActivity extends FragmentActivity {
     ArrayList<String> items;
     ArrayAdapter<String> itemsAdapter;
     ListView lvItems;
@@ -43,6 +45,8 @@ public class MainActivity extends Activity {
             items.add("Second item");
         }
         setupListViewListener();
+        // Ensure soft keyboard is hidden
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
     private void setupListViewListener() {
@@ -64,32 +68,30 @@ public class MainActivity extends Activity {
                     @Override
                     public void onItemClick(AdapterView<?> adapter,
                                             View item, int pos, long id) {
-                        Intent intent = new Intent(MainActivity.this, EditItemActivity.class);
-                        intent.putExtra("item_to_edit", items.get(pos));
-                        intent.putExtra("position", pos);
-                        startActivityForResult(intent, EDIT_ITEM);
+
+                        showEditDialog(pos);
                     }
                 }
         );
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case EDIT_ITEM:
-                if (resultCode == RESULT_OK) {
-                    int pos = data.getIntExtra("position", -1);
-                    if (pos >= 0) {
-                        items.set(pos, data.getExtras().getString("name"));
-                    }
-                }
-                itemsAdapter.notifyDataSetChanged();
-                writeItems();
-                break;
-            default:
-                break;
-        }
+    private void showEditDialog(int itemPosition) {
+        FragmentManager fm = getSupportFragmentManager();
+        EditItemDialog editNameDialog = EditItemDialog.newInstance("Edit Item", items.get(itemPosition), itemPosition);
+        editNameDialog.show(fm, "fragment_edit_name");
+    }
 
+    @Override
+    public void onFinishEditDialog(String inputText, int itemPosition) {
+        items.set(itemPosition, inputText);
+        itemsAdapter.notifyDataSetChanged();
+        writeItems();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
     @Override
