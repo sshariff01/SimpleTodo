@@ -29,10 +29,10 @@ g
             android:layout_height="wrap_content"
             android:text="@string/priority_low"
             android:onClick="onRadioButtonClicked"/>
-        <RadioButton android:id="@+id/priority_med"
+        <RadioButton android:id="@+id/priority_normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/priority_med"
+            android:text="@string/priority_normal"
             android:onClick="onRadioButtonClicked"/>
         <RadioButton android:id="@+id/priority_high"
             android:layout_width="wrap_content"

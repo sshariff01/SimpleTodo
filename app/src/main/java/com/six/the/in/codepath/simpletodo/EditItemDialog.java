@@ -22,7 +22,7 @@ public class EditItemDialog extends DialogFragment implements TextView.OnEditorA
 
     private EditText mEditText;
     private Button saveBtn;
-    private RadioButton prio_LowBtn, prio_MedBtn, prio_HighBtn, prio_UrgentBtn;
+    private RadioButton prio_LowBtn, prio_NormBtn, prio_HighBtn, prio_UrgentBtn;
     private int itemPriority;
 
     public interface EditItemDialogListener {
@@ -70,8 +70,8 @@ public class EditItemDialog extends DialogFragment implements TextView.OnEditorA
         itemPriority = getArguments().getInt("itemPriority");
         prio_LowBtn = (RadioButton) view.findViewById(R.id.priority_low);
         prio_LowBtn.setOnClickListener(this);
-        prio_MedBtn = (RadioButton) view.findViewById(R.id.priority_med);
-        prio_MedBtn.setOnClickListener(this);
+        prio_NormBtn = (RadioButton) view.findViewById(R.id.priority_normal);
+        prio_NormBtn.setOnClickListener(this);
         prio_HighBtn = (RadioButton) view.findViewById(R.id.priority_high);
         prio_HighBtn.setOnClickListener(this);
         prio_UrgentBtn = (RadioButton) view.findViewById(R.id.priority_urgent);
@@ -88,7 +88,7 @@ public class EditItemDialog extends DialogFragment implements TextView.OnEditorA
                 prio_LowBtn.setChecked(true);
                 break;
             case TodoItem.PRIO_NORMAL_INT:
-                prio_MedBtn.setChecked(true);
+                prio_NormBtn.setChecked(true);
                 break;
             case TodoItem.PRIO_HIGH_INT:
                 prio_HighBtn.setChecked(true);
@@ -106,9 +106,9 @@ public class EditItemDialog extends DialogFragment implements TextView.OnEditorA
                 itemPriority = TodoItem.PRIO_LOW_INT;
                 prio_LowBtn.setChecked(true);
                 break;
-            case R.id.priority_med:
+            case R.id.priority_normal:
                 itemPriority = TodoItem.PRIO_NORMAL_INT;
-                prio_MedBtn.setChecked(true);
+                prio_NormBtn.setChecked(true);
                 break;
             case R.id.priority_high:
                 itemPriority = TodoItem.PRIO_HIGH_INT;

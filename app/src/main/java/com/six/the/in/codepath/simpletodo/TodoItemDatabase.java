@@ -93,7 +93,7 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
         String selectQuery = "SELECT  * FROM " + TABLE_TODO;
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
+        Cursor cursor = db.rawQuery(selectQuery + " ORDER BY "+ KEY_PRIORITY + " DESC", null);
 
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
