@@ -10,13 +10,13 @@
         android:minEms="7"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:layout_margin="7sp"
+        android:layout_margin="6sp"
         android:imeOptions="actionDone" />
-g
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5sp"
+        android:layout_marginLeft="10sp"
         android:text="Priority: "
         android:textSize="14dp" />
 
