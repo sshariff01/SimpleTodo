@@ -4,7 +4,7 @@ SimpleTodo is an android app that allows building a todo list and basic todo ite
 
 Submitted by: Shoabe Shariff
 
-Time spent: 6 hours spent in total
+Time spent: 8 hours spent in total
 
 ## User Stories
 
@@ -21,13 +21,17 @@ The following **optional** features are implemented:
 * [ ] Add support for completion due dates for todo items (and display within listview item)
 * [X] Use a [DialogFragment](http://guides.codepath.com/android/Using-DialogFragment) instead of new Activity for editing items
 * [X] Add support for selecting the priority of each todo item (and display in listview item)
-* [ ] Tweak the style improving the UI / UX, play with colors, images or backgrounds
+* [X] Tweak the style improving the UI / UX, play with colors, images or backgrounds
+
+The following **additional** features are implemented:
+
+* [X] Add support for check todo items as complete
 
 ## Video Walkthrough 
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/kdCVVok.gif' title='Simple ToDo Demo' width='' alt='Video Walkthrough' />
+<img src='http://i.imgur.com/zzsSZ6b.gif' title='Simple ToDo Demo' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
@@ -35,6 +39,7 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 * I found it tricky passing data from the activity to the edit dialog fragment and back
 * I had some difficulty getting the list items to update after modifying the database, leading to my implementation of the refreshItems() method
+* It took me a bit of time to implement the listener on the todo item checkbox (particularly in accessing the correct list item). This was accomplished by setting each list item as a tag to its corresponding checkbox.
 
 ## License
 
