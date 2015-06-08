@@ -26,6 +26,7 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
     private static final String KEY_ID = "id";
     private static final String KEY_BODY = "body";
     private static final String KEY_PRIORITY = "priority";
+    private static final String KEY_CHECKED = "checked";
 
     public TodoItemDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -40,8 +41,10 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // Construct a table for todo items
         String CREATE_TODO_TABLE = "CREATE TABLE " + TABLE_TODO + "("
-                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_BODY + " TEXT,"
-                + KEY_PRIORITY + " INTEGER" + ")";
+                + KEY_ID + " INTEGER PRIMARY KEY,"
+                + KEY_BODY + " TEXT,"
+                + KEY_PRIORITY + " INTEGER,"
+                + KEY_CHECKED + " INTEGER" + ")";
         db.execSQL(CREATE_TODO_TABLE);
     }
 
@@ -69,7 +72,7 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         // Construct and execute query
         Cursor cursor = db.query(TABLE_TODO,  // TABLE
-                new String[]{KEY_ID, KEY_BODY, KEY_PRIORITY}, // SELECT
+                new String[]{KEY_ID, KEY_BODY, KEY_PRIORITY, KEY_CHECKED}, // SELECT
                 KEY_ID + "= ?", new String[]{String.valueOf(id)},  // WHERE, ARGS
                 null, null, "id ASC", "100"); // GROUP BY, HAVING, ORDER BY, LIMIT
         if (cursor != null)
@@ -93,13 +96,14 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
         String selectQuery = "SELECT  * FROM " + TABLE_TODO;
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery + " ORDER BY "+ KEY_PRIORITY + " DESC", null);
+        Cursor cursor = db.rawQuery(selectQuery + " ORDER BY " + KEY_PRIORITY + " DESC", null);
 
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
                 TodoItem item = new TodoItem(cursor.getString(1), cursor.getInt(2));
                 item.setId(cursor.getInt(0));
+                item.setChecked(cursor.getInt(3));
                 // Adding todo item to list
                 todoItems.add(item);
             } while (cursor.moveToNext());
@@ -122,6 +126,7 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_BODY, item.getBody());
         values.put(KEY_PRIORITY, item.getPriority());
+        values.put(KEY_CHECKED, item.isChecked());
         // Insert Row and get generated id
         long rowId = db.insertOrThrow(TABLE_TODO, null, values);
         // Closing database connection
@@ -138,6 +143,7 @@ public class TodoItemDatabase extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_BODY, item.getBody());
         values.put(KEY_PRIORITY, item.getPriority());
+        values.put(KEY_CHECKED, item.isChecked());
         // Updating row
         String itemId = String.valueOf(item.getId());
         int result = db.update(TABLE_TODO, values, KEY_ID + " = " + itemId,

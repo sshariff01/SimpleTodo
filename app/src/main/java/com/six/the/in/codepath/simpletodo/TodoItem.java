@@ -10,6 +10,7 @@ public class TodoItem {
     private int id;
     private String body;
     private int priority;
+    private boolean checked;
 
     public static final int PRIO_LOW_INT = 1;
     public static final int PRIO_NORMAL_INT = 2;
@@ -32,12 +33,14 @@ public class TodoItem {
         super();
         this.body = body;
         this.priority = priority;
+        this.checked = false;
     }
 
     public TodoItem(String body) {
         super();
         this.body = body;
         this.priority = PRIO_LOW_INT;
+        this.checked = false;
     }
 
     public String getBody() {
@@ -52,6 +55,10 @@ public class TodoItem {
         return priority;
     }
 
+    public String getPriorityString() {
+        return priorityMap.get(this.priority);
+    }
+
     public void setPriority(int priority) {
         this.priority = priority;
     }
@@ -64,7 +71,15 @@ public class TodoItem {
         this.id = id;
     }
 
-    public String getPriorityString() {
-        return priorityMap.get(this.priority);
+    public int isChecked() {
+        return checked ? 1 : 0;
+    }
+
+    public void setChecked(int checkedVal) {
+        this.checked = checkedVal != 0;
+    }
+
+    public void toggleChecked() {
+        this.checked = !checked;
     }
 }

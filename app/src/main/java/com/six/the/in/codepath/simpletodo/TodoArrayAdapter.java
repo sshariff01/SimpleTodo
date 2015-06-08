@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
  * Created by shoabe on 15-06-07.
  */
 public class TodoArrayAdapter extends ArrayAdapter<TodoItem> {
+
     public TodoArrayAdapter(Context context, ArrayList<TodoItem> items) {
         super(context, 0, items);
     }
@@ -29,6 +31,7 @@ public class TodoArrayAdapter extends ArrayAdapter<TodoItem> {
         // Lookup view for data population
         TextView txtListItem = (TextView) convertView.findViewById(R.id.txtListItem);
         TextView txtItemPriority = (TextView) convertView.findViewById(R.id.txtItemPrio);
+        CheckBox chkBoxItemChecked = (CheckBox) convertView.findViewById(R.id.chckBoxItemStatus);
 
         // Populate the data into the template view using the data object
         txtListItem.setText(item.getBody());
@@ -47,6 +50,10 @@ public class TodoArrayAdapter extends ArrayAdapter<TodoItem> {
                 txtItemPriority.setTextColor(Color.RED);
                 break;
         }
+        chkBoxItemChecked.setChecked(item.isChecked() != 0);
+        // Optimization: Tag the row with it's child views, so we don't have to
+        // call findViewById() later when we reuse the row.
+        chkBoxItemChecked.setTag(item);
 
         // Return the completed view to render on screen
         return convertView;

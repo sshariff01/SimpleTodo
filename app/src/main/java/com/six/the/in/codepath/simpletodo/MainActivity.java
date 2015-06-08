@@ -8,8 +8,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -29,7 +31,6 @@ public class MainActivity extends FragmentActivity implements EditItemDialog.Edi
         db = new TodoItemDatabase(this);
 
         lvItems = (ListView) findViewById(R.id.lvItems);
-//        items = new ArrayList<TodoItem>();
         refreshItems();
         itemsAdapter = new TodoArrayAdapter(
                 this,
@@ -120,7 +121,7 @@ public class MainActivity extends FragmentActivity implements EditItemDialog.Edi
         etNewItem.setText("");
     }
 
-    private void refreshItems() {
+    public void refreshItems() {
         // Querying all to-do items
         items = db.getAllTodoItems();
         // Resetting the adapter
@@ -129,5 +130,20 @@ public class MainActivity extends FragmentActivity implements EditItemDialog.Edi
                 items
         );
         lvItems.setAdapter(itemsAdapter);
+    }
+
+    public void onCheckboxToggled(View v) {
+        CheckBox chkBoxItemStatus = (CheckBox) v.findViewById(R.id.chckBoxItemStatus);
+        TodoItem item = (TodoItem) chkBoxItemStatus.getTag();
+        item.toggleChecked();
+        chkBoxItemStatus.setTag(item);
+        db.updateTodoItem(item);
+        refreshItems();
+
+        if (item.isChecked() != 0) {
+            Toast.makeText(MainActivity.this, "Task Complete!", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(MainActivity.this, "Task Marked Incomplete", Toast.LENGTH_SHORT).show();
+        }
     }
 }
